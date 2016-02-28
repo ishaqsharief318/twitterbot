@@ -10,7 +10,7 @@ config.read('secret.ini')
 
 CONSUMER_KEY = config.get('keys', 'consumerkey')
 CONSUMER_SECRET = config.get('keys', 'consumersecret')
-ACCESS_KEY = config.get('keys', 'accesskeys')
+ACCESS_KEY = config.get('keys', 'accesskey')
 ACCESS_SECRET = config.get('keys', 'accesssecret')
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -35,6 +35,5 @@ def make_file():
 def read_file():
 	with open('tweetdict.pickle', 'rb') as handle:
 		tweet_file = pickle.load(handle)
-	print tweet_file
 
 read_file()
