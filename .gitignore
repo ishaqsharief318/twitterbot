@@ -1,2 +1,3 @@
-secrets.ini
+secret.ini
 tweetdict.pickle
+.idea/

@@ -1,9 +1,9 @@
+# -*- coding: utf-8 -*-
+
 import tweepy
-import sys
-import time
-import pickle
 import ConfigParser
 import logging
+import sys
 
 config = ConfigParser.ConfigParser()
 config.read('secret.ini')
@@ -17,23 +17,26 @@ auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
 
-tweet_dict = {}
+retwt_list = ["@OptaJoe", "@ManUtd_Hindi", "@juanmata8", "@ManUtd", "@Redcafe", "@samuelluckhurst", "@FantasyScout1"]
+keywords = ['Manchester United', 'mufc', '#mufc', '#manutd', 'manutd', 'José', 'Mourinho', 'josé', 'mourinho', 'Jose', 'Jose Mourinho' ]
 
-retwt_list = ["@ManUtdStuff","@ManUtd_Hindi","@juanmata8","@ManUtd"]
+handler = logging.StreamHandler(sys.stdout)
+handler.setFormatter(logging.Formatter(
+    '%(asctime)s - %(levelname)s - %(filename)s:%(funcName)s:%(lineno)d - %(message)s', '%Y-%m-%d-%H:%M:%S'  # NOQA
+))
+logging.getLogger().setLevel(logging.INFO)
+logging.getLogger().addHandler(handler)
+log = logging.getLogger(__name__)
 
-def make_file():
-	try:
-		for account in retwt_list:
-			retwt = api.user_timeline(id = account, count = 1)
-			for each in retwt:
-				tweet_dict[account] = each.id
-		with open('tweetdict.pickle', 'wb') as handle:
-			pickle.dump(tweet_dict, handle)
-	except Exception as e:
-		print str(e)
+def rt_the_twts(retwt_list):
+  for account in retwt_list:
+    retwt = api.user_timeline(id=account, count=1)
+    for each in retwt:
+      try:
+        log.info('Retweeting {} from {}'.format(api.retweet(each.text), account))
+        api.retweet(each.id)
+      except tweepy.error.TweepError:
+        log.error('Already Tweeted')
 
-def read_file():
-	with open('tweetdict.pickle', 'rb') as handle:
-		tweet_file = pickle.load(handle)
 
-read_file()
+rt_the_twts(retwt_list)
