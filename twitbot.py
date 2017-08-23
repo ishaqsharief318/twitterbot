@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # flake8: noqa
 #
-# test
 
 import tweepy
 import ConfigParser
